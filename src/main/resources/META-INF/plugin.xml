@@ -20,7 +20,6 @@
         </ul>
     ]]></description>
 
-    <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.java</depends>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JAVA" implementationClass="com.birariro.highlight.BddHighlighter"/>
