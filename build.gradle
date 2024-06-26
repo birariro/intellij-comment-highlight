@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '1.17.3'
+
+
+}
+
+group 'com.birariro'
+version '1.0'
+
+sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+
+}
+
+intellij {
+    version = '2021.3.3'
+    plugins = ['com.intellij.java']
+
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

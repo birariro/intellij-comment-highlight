@@ -1,0 +1,30 @@
+<idea-plugin>
+    <id>com.birariro.comment.highlight</id>
+    <name>Comment Highlight</name>
+    <version>1.0</version>
+    <vendor url="https://github.com/birariro">birariro</vendor>
+    <depends>com.intellij.modules.lang</depends>
+
+    <description><![CDATA[
+        Highlight Comment
+
+        <p>Supported languages:</p>
+        <ul>
+          <li>java</li>
+        </ul>
+
+        <p>Highlight keywords:</p>
+        <ul>
+          <li>Common keywords: '!', '?'</li>
+          <li>BDD keywords: 'given', 'when', 'then'</li>
+        </ul>
+    ]]></description>
+
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.java</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <annotator language="JAVA" implementationClass="com.birariro.highlight.BddHighlighter"/>
+        <annotator language="JAVA" implementationClass="com.birariro.highlight.CommentHighlighter"/>
+    </extensions>
+
+</idea-plugin>
