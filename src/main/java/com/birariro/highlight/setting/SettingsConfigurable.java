@@ -1,5 +1,7 @@
 package com.birariro.highlight.setting;
 
+import com.birariro.highlight.BddHighlighter;
+import com.birariro.highlight.CommentHighlighter;
 import com.intellij.openapi.options.Configurable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
@@ -10,9 +12,9 @@ import java.util.Objects;
 /**
  * Provides controller functionality for application settings.
  */
-final class AppSettingsConfigurable implements Configurable {
+final class SettingsConfigurable implements Configurable {
 
-  private CommentHighlighterSettingsComponent mySettingsComponent;
+  private SettingsComponent mySettingsComponent;
 
   // A default constructor with no arguments is required because
   // this implementation is registered as an applicationConfigurable
@@ -27,7 +29,7 @@ final class AppSettingsConfigurable implements Configurable {
   @Nullable
   @Override
   public JComponent createComponent() {
-    mySettingsComponent = new CommentHighlighterSettingsComponent();
+    mySettingsComponent = new SettingsComponent();
     return mySettingsComponent.getPanel();
   }
 
@@ -35,7 +37,7 @@ final class AppSettingsConfigurable implements Configurable {
   public boolean isModified() {
     AppSettings.State state =
         Objects.requireNonNull(AppSettings.getInstance().getState());
-    return !mySettingsComponent.getQuestionColor().equals(state.questionColor) ||
+    return mySettingsComponent.getQuestionColor() != state.questionColor ||
         mySettingsComponent.getExclamationColor() != state.exclamationColor ||
             mySettingsComponent.getBddColor() != state.bddColor;
   }
@@ -47,6 +49,9 @@ final class AppSettingsConfigurable implements Configurable {
     state.questionColor = mySettingsComponent.getQuestionColor();
     state.exclamationColor = mySettingsComponent.getExclamationColor();
     state.bddColor = mySettingsComponent.getBddColor();
+
+    BddHighlighter.update();
+    CommentHighlighter.update();
   }
 
   @Override

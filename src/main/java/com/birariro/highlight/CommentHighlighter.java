@@ -19,10 +19,12 @@ public class CommentHighlighter implements Annotator {
             TextAttributesKey.createTextAttributesKey("BLUE_COMMENT_KEYWORD");
     private static final String RED_KEYWORD = "!";
     private static final String BLUE_KEYWORD = "?";
-
+    private static final AppSettings settings = AppSettings.getInstance();
 
     static {
-        AppSettings settings = AppSettings.getInstance();
+        update();
+    }
+    public static void update(){
 
         TextAttributes redTextAttributes = new TextAttributes();
         redTextAttributes.setForegroundColor(settings.getExclamationColor());

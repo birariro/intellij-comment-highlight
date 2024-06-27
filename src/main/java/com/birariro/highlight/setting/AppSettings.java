@@ -21,8 +21,6 @@ public final class AppSettings
     public Color questionColor =  new Color(35, 45, 241);
     public Color exclamationColor =  new Color(245, 37, 100);
     public Color bddColor =  new Color(192, 252, 200,99);
-
-
   }
 
   private State myState = new State();

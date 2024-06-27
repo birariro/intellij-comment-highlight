@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.birariro.comment.highlight</id>
     <name>Comment Highlight</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <vendor url="https://github.com/birariro">birariro</vendor>
     <depends>com.intellij.modules.lang</depends>
 
@@ -20,6 +20,15 @@
         </ul>
     ]]></description>
 
+    <change-notes><![CDATA[
+        <p>1.*</p>
+        <ul>
+            <li>simple highlight</li>
+            <li>simple highlight custom color </li>
+        </ul>
+        ]]>
+    </change-notes>
+
     <depends>com.intellij.java</depends>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JAVA" implementationClass="com.birariro.highlight.BddHighlighter"/>
@@ -28,7 +37,7 @@
                 serviceImplementation="com.birariro.highlight.setting.AppSettings"/>
         <applicationConfigurable
                 parentId="tools"
-                instance="com.birariro.highlight.setting.AppSettingsConfigurable"
+                instance="com.birariro.highlight.setting.SettingsConfigurable"
                 id="org.intellij.sdk.settings.AppSettingsConfigurable"
                 displayName="comment highlight"/>
     </extensions>

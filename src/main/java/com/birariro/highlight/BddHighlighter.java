@@ -17,12 +17,15 @@ public class BddHighlighter implements Annotator {
             TextAttributesKey.createTextAttributesKey("BDD.KEYWORD");
 
     private static final String [] KEYWORDS = {"given","when","then"};
-
+    private static final AppSettings settings = AppSettings.getInstance();
     static {
-        AppSettings settings = AppSettings.getInstance();
+        update();
+    }
+
+    public static void update(){
 
         TextAttributes textAttributes = new TextAttributes();
-        textAttributes.setForegroundColor(Colors.WHITE);
+        textAttributes.setForegroundColor(Color.WHITE);
         textAttributes.setBackgroundColor(settings.getBddColor());
         textAttributes.setFontType(Font.BOLD);
         com.intellij.openapi.editor.colors.EditorColorsManager.getInstance().getGlobalScheme().setAttributes(BDD_KEYWORD, textAttributes);
