@@ -4,6 +4,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,10 +18,15 @@ public final class AppSettings
     implements PersistentStateComponent<AppSettings.State> {
 
   static class State {
-    @NonNls
-    public Color questionColor =  new Color(35, 45, 241);
-    public Color exclamationColor =  new Color(245, 37, 100);
-    public Color bddColor =  new Color(192, 252, 200,99);
+    public Color questionColor;
+    public Color exclamationColor;
+    public Color bddColor;
+
+    State() {
+      questionColor = new Color(35, 45, 241);
+      exclamationColor = new Color(245, 37, 100);
+      bddColor = new Color(192, 252, 200);
+    }
   }
 
   private State myState = new State();

@@ -3,6 +3,7 @@ package com.birariro.highlight;
 import com.birariro.highlight.setting.AppSettings;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.util.TextRange;
@@ -10,6 +11,7 @@ import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.Color;
 import java.awt.Font;
 
 public class CommentHighlighter implements Annotator {
@@ -19,22 +21,22 @@ public class CommentHighlighter implements Annotator {
             TextAttributesKey.createTextAttributesKey("BLUE_COMMENT_KEYWORD");
     private static final String RED_KEYWORD = "!";
     private static final String BLUE_KEYWORD = "?";
-    private static final AppSettings settings = AppSettings.getInstance();
 
-    static {
-        update();
-    }
     public static void update(){
+        ApplicationManager.getApplication().invokeLater(() -> {
+            AppSettings settings = AppSettings.getInstance();
 
-        TextAttributes redTextAttributes = new TextAttributes();
-        redTextAttributes.setForegroundColor(settings.getExclamationColor());
-        redTextAttributes.setFontType(Font.ITALIC);
-        com.intellij.openapi.editor.colors.EditorColorsManager.getInstance().getGlobalScheme().setAttributes(RED_COMMENT_KEYWORD, redTextAttributes);
+            TextAttributes redTextAttributes = new TextAttributes();
+            redTextAttributes.setForegroundColor(settings.getExclamationColor());
+            redTextAttributes.setFontType(Font.ITALIC);
+            com.intellij.openapi.editor.colors.EditorColorsManager.getInstance().getGlobalScheme().setAttributes(RED_COMMENT_KEYWORD, redTextAttributes);
 
-        TextAttributes blueTextAttributes = new TextAttributes();
-        blueTextAttributes.setForegroundColor(settings.getQuestionColor());
-        blueTextAttributes.setFontType(Font.ITALIC);
-        com.intellij.openapi.editor.colors.EditorColorsManager.getInstance().getGlobalScheme().setAttributes(BLUE_COMMENT_KEYWORD, blueTextAttributes);
+            TextAttributes blueTextAttributes = new TextAttributes();
+            blueTextAttributes.setForegroundColor(settings.getQuestionColor());
+            blueTextAttributes.setFontType(Font.ITALIC);
+            com.intellij.openapi.editor.colors.EditorColorsManager.getInstance().getGlobalScheme().setAttributes(BLUE_COMMENT_KEYWORD, blueTextAttributes);
+        });
+
     }
 
     @Override

@@ -31,8 +31,7 @@
 
     <depends>com.intellij.java</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="JAVA" implementationClass="com.birariro.highlight.BddHighlighter"/>
-        <annotator language="JAVA" implementationClass="com.birariro.highlight.CommentHighlighter"/>
+
         <applicationService
                 serviceImplementation="com.birariro.highlight.setting.AppSettings"/>
         <applicationConfigurable
@@ -40,5 +39,9 @@
                 instance="com.birariro.highlight.setting.SettingsConfigurable"
                 id="org.intellij.sdk.settings.AppSettingsConfigurable"
                 displayName="comment highlight"/>
+
+        <annotator language="JAVA" implementationClass="com.birariro.highlight.BddHighlighter"/>
+        <annotator language="JAVA" implementationClass="com.birariro.highlight.CommentHighlighter"/>
+
     </extensions>
 </idea-plugin>
