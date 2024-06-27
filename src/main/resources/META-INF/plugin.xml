@@ -24,6 +24,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JAVA" implementationClass="com.birariro.highlight.BddHighlighter"/>
         <annotator language="JAVA" implementationClass="com.birariro.highlight.CommentHighlighter"/>
+        <applicationService
+                serviceImplementation="com.birariro.highlight.setting.AppSettings"/>
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.birariro.highlight.setting.AppSettingsConfigurable"
+                id="org.intellij.sdk.settings.AppSettingsConfigurable"
+                displayName="comment highlight"/>
     </extensions>
-
 </idea-plugin>
