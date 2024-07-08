@@ -19,13 +19,36 @@ public class SettingsComponent {
   private final JButton questionColorButton;
   private final JButton exclamationColorButton;
 
+  public static final Icon DEFAULT_ICON = new Icon() {
+    @Override
+    public void paintIcon(Component c, Graphics g, int x, int y) {
+      g.setColor(c.getBackground());
+      g.fillRect(x, y, 20, 20);
+    }
+
+    @Override
+    public int getIconWidth() {
+      return 20;
+    }
+
+    @Override
+    public int getIconHeight() {
+      return 20;
+    }
+  };
+
   public SettingsComponent() {
     panel = new JPanel(new GridBagLayout());
     GridBagConstraints gbc = createGbc();
 
     bddColorButton = createColorButton(settings.getBddColor(), bddColorLabel);
+    bddColorButton.setIcon(DEFAULT_ICON);
+
     questionColorButton = createColorButton(settings.getQuestionColor(), questionColorLabel);
+    questionColorButton.setIcon(DEFAULT_ICON);
+
     exclamationColorButton = createColorButton(settings.getExclamationColor(), exclamationColorLabel);
+    exclamationColorButton.setIcon(DEFAULT_ICON);
 
     bddColorLabel.setText(colorToRGBString(settings.getBddColor()));
     questionColorLabel.setText(colorToRGBString(settings.getQuestionColor()));
@@ -46,7 +69,7 @@ public class SettingsComponent {
 
   private JButton createColorButton(Color initialColor, JLabel label) {
     JButton colorButton = new JButton();
-    colorButton.setPreferredSize(new Dimension(30, 30));
+    colorButton.setPreferredSize(new Dimension(20, 20));
     colorButton.setBackground(initialColor);
     colorButton.setOpaque(true);
     colorButton.setBorderPainted(false);

@@ -1,10 +1,8 @@
 package com.birariro.highlight;
 
 import com.birariro.highlight.setting.AppSettings;
-import com.birariro.highlight.support.Colors;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.util.TextRange;
@@ -12,7 +10,6 @@ import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Color;
 import java.awt.Font;
 
 public class CommentHighlighter implements Annotator {
