@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.birariro'
-version '1.0'
+version '1.1'
 
 sourceCompatibility = 11
 
@@ -21,9 +21,15 @@ dependencies {
 }
 
 intellij {
-    version = '2021.3.3'
+    version = '2021.3.3' // 최신 안정 버전
+    type = 'IC' // 'IU' for Ultimate Edition or 'IC' for Community Edition
     plugins = ['com.intellij.java']
+    pluginName = 'BDD Highlighter'
 
+}
+patchPluginXml {
+    sinceBuild = '213' // 해당 버전 이상에서 동작
+    untilBuild = '232.*' // 해당 버전의 모든 마이너 버전까지 동작
 }
 
 tasks.withType(JavaCompile) {
