@@ -3,7 +3,7 @@
     <img src="./src/main/resources/META-INF/pluginIcon.svg" width="100" height="100" alt="logo"/>
 </div>
 
-[marketplace]("https://plugins.jetbrains.com/plugin/24741-comment-highlight")
+[intellij plugin marketplace](https://plugins.jetbrains.com/plugin/24741-comment-highlight)
 
 <p>Supported languages:</p>
 <ul>

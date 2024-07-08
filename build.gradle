@@ -24,7 +24,7 @@ intellij {
     version = '2021.3.3' // 최신 안정 버전
     type = 'IC' // 'IU' for Ultimate Edition or 'IC' for Community Edition
     plugins = ['com.intellij.java']
-    pluginName = 'BDD Highlighter'
+    pluginName = 'comment highlight'
 
 }
 patchPluginXml {

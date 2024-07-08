@@ -11,9 +11,9 @@ public class SettingsComponent {
   private final Colors colors = new Colors();
   private final AppSettings settings = AppSettings.getInstance();
   private final JPanel panel;
-  private final JTextField bddColorField = new JTextField(10);
-  private final JTextField questionColorField = new JTextField(10);
-  private final JTextField exclamationColorField = new JTextField(10);
+  private final JLabel bddColorLabel = new JLabel();
+  private final JLabel questionColorLabel = new JLabel();
+  private final JLabel exclamationColorLabel = new JLabel();
 
   private final JButton bddColorButton;
   private final JButton questionColorButton;
@@ -23,17 +23,17 @@ public class SettingsComponent {
     panel = new JPanel(new GridBagLayout());
     GridBagConstraints gbc = createGbc();
 
-    bddColorButton = createColorButton(settings.getBddColor(), bddColorField);
-    questionColorButton = createColorButton(settings.getQuestionColor(), questionColorField);
-    exclamationColorButton = createColorButton(settings.getExclamationColor(), exclamationColorField);
+    bddColorButton = createColorButton(settings.getBddColor(), bddColorLabel);
+    questionColorButton = createColorButton(settings.getQuestionColor(), questionColorLabel);
+    exclamationColorButton = createColorButton(settings.getExclamationColor(), exclamationColorLabel);
 
-    bddColorField.setText(colorToRGBString(settings.getBddColor()));
-    questionColorField.setText(colorToRGBString(settings.getQuestionColor()));
-    exclamationColorField.setText(colorToRGBString(settings.getExclamationColor()));
+    bddColorLabel.setText(colorToRGBString(settings.getBddColor()));
+    questionColorLabel.setText(colorToRGBString(settings.getQuestionColor()));
+    exclamationColorLabel.setText(colorToRGBString(settings.getExclamationColor()));
 
-    addColorSetting(gbc, 0, "BDD ", bddColorField, bddColorButton);
-    addColorSetting(gbc, 1, "? ", questionColorField, questionColorButton);
-    addColorSetting(gbc, 2, "! ", exclamationColorField, exclamationColorButton);
+    addColorSetting(gbc, 0, "BDD ", bddColorLabel, bddColorButton);
+    addColorSetting(gbc, 1, "? ", questionColorLabel, questionColorButton);
+    addColorSetting(gbc, 2, "! ", exclamationColorLabel, exclamationColorButton);
   }
 
   private GridBagConstraints createGbc() {
@@ -44,7 +44,7 @@ public class SettingsComponent {
     return gbc;
   }
 
-  private JButton createColorButton(Color initialColor, JTextField colorField) {
+  private JButton createColorButton(Color initialColor, JLabel label) {
     JButton colorButton = new JButton();
     colorButton.setPreferredSize(new Dimension(30, 30));
     colorButton.setBackground(initialColor);
@@ -55,15 +55,16 @@ public class SettingsComponent {
       public void actionPerformed(ActionEvent e) {
         Color chosenColor = showColorChooser(colorButton.getBackground());
         if (chosenColor != null) {
-          colorField.setText(colorToRGBString(chosenColor));
+          label.setText(colorToRGBString(chosenColor));
           colorButton.setBackground(chosenColor);
+          colorButton.setForeground(chosenColor);
         }
       }
     });
     return colorButton;
   }
 
-  private void addColorSetting(GridBagConstraints gbc, int gridY, String labelText, JTextField colorField, JButton colorButton) {
+  private void addColorSetting(GridBagConstraints gbc, int gridY, String labelText, JLabel colorLabel, JButton colorButton) {
     gbc.gridx = 0;
     gbc.gridy = gridY;
     JLabel label = new JLabel(labelText);
@@ -71,7 +72,7 @@ public class SettingsComponent {
     panel.add(label, gbc);
 
     gbc.gridx = 1;
-    panel.add(colorField, gbc);
+    panel.add(colorLabel, gbc);
 
     gbc.gridx = 2;
     panel.add(colorButton, gbc);
@@ -90,26 +91,26 @@ public class SettingsComponent {
   }
 
   public String getQuestionColorString() {
-    return questionColorField.getText();
+    return questionColorLabel.getText();
   }
 
   public String getExclamationColorString() {
-    return exclamationColorField.getText();
+    return exclamationColorLabel.getText();
   }
 
   public String getBddColorString() {
-    return bddColorField.getText();
+    return bddColorLabel.getText();
   }
 
   public void setQuestionColor(Color color) {
-    questionColorField.setText(colorToRGBString(color));
+    questionColorLabel.setText(colorToRGBString(color));
   }
 
   public void setExclamationColor(Color color) {
-    exclamationColorField.setText(colorToRGBString(color));
+    exclamationColorLabel.setText(colorToRGBString(color));
   }
 
   public void setBddColor(Color color) {
-    bddColorField.setText(colorToRGBString(color));
+    bddColorLabel.setText(colorToRGBString(color));
   }
 }

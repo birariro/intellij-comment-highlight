@@ -37,7 +37,7 @@
         <applicationConfigurable
                 parentId="tools"
                 instance="com.birariro.highlight.setting.SettingsConfigurable"
-                id="org.intellij.sdk.settings.AppSettingsConfigurable"
+                id="com.birariro.highlight.setting.SettingsConfigurable"
                 displayName="comment highlight"/>
 
         <annotator language="JAVA" implementationClass="com.birariro.highlight.BddHighlighter"/>
