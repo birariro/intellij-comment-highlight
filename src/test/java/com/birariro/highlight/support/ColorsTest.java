@@ -19,5 +19,6 @@ public class ColorsTest  {
 
         String greenStr = colors.colorToString(new Color(192, 252, 200));
         Assert.assertEquals("#c0fcc8", greenStr);
+
     }
 }

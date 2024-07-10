@@ -1,6 +1,7 @@
 package com.birariro.highlight;
 
 import com.birariro.highlight.setting.AppSettings;
+import com.birariro.highlight.support.KeywordMatch;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -21,6 +22,7 @@ public class CommentHighlighter implements Annotator {
     private static final String RED_KEYWORD = "!";
     private static final String BLUE_KEYWORD = "?";
 
+    private static KeywordMatch keywordMatch = new KeywordMatch();
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -40,13 +42,13 @@ public class CommentHighlighter implements Annotator {
         if (element instanceof PsiComment) {
             String text = element.getText();
 
-            if (text.contains(RED_KEYWORD)) {
+            if (keywordMatch.matches(text,RED_KEYWORD)) {
                 TextRange range = element.getTextRange();
                 holder.newSilentAnnotation(com.intellij.lang.annotation.HighlightSeverity.INFORMATION)
                         .range(range)
                         .textAttributes(RED_COMMENT_KEYWORD)
                         .create();
-            } else if (text.contains(BLUE_KEYWORD)) {
+            } else if (keywordMatch.matches(text,BLUE_KEYWORD)) {
                 TextRange range = element.getTextRange();
                 holder.newSilentAnnotation(com.intellij.lang.annotation.HighlightSeverity.INFORMATION)
                         .range(range)
