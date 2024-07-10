@@ -1,6 +1,5 @@
 package com.birariro.highlight.setting;
 
-import com.birariro.highlight.support.Colors;
 import com.intellij.openapi.options.Configurable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
@@ -13,8 +12,7 @@ import java.util.Objects;
  */
 final class SettingsConfigurable implements Configurable {
 
-  private SettingsComponent mySettingsComponent;
-  private Colors colors = new Colors();
+  private SettingsComponent component;
 
   // A default constructor with no arguments is required because
   // this implementation is registered as an applicationConfigurable
@@ -29,42 +27,31 @@ final class SettingsConfigurable implements Configurable {
   @Nullable
   @Override
   public JComponent createComponent() {
-    mySettingsComponent = new SettingsComponent();
-    return mySettingsComponent.getPanel();
+    component = new SettingsComponent();
+    return component.getPanel();
   }
 
   @Override
   public boolean isModified() {
-    AppSettings appSettings =
-            Objects.requireNonNull(AppSettings.getInstance());
-
-    return colors.stringToColor(mySettingsComponent.getQuestionColorString()) != appSettings.getQuestionColor() ||
-            colors.stringToColor(mySettingsComponent.getExclamationColorString()) != appSettings.getExclamationColor() ||
-            colors.stringToColor(mySettingsComponent.getBddColorString()) != appSettings.getBddColor();
+    return true;
   }
 
   @Override
   public void apply() {
     AppSettings appSettings =
             Objects.requireNonNull(AppSettings.getInstance());
-    appSettings.setQuestionColor(mySettingsComponent.getQuestionColorString());
-    appSettings.setExclamationColor(mySettingsComponent.getExclamationColorString());
-    appSettings.setBddColor(mySettingsComponent.getBddColorString());
-
+    appSettings.setKeywordColors(component.getContents());
   }
 
   @Override
   public void reset() {
     AppSettings appSettings =
         Objects.requireNonNull(AppSettings.getInstance());
-    mySettingsComponent.setQuestionColor(appSettings.getQuestionColor());
-    mySettingsComponent.setExclamationColor(appSettings.getExclamationColor());
-    mySettingsComponent.setBddColor(appSettings.getBddColor());
+    component.setContents(appSettings.getKeywordColors());
   }
 
   @Override
   public void disposeUIResources() {
-    mySettingsComponent = null;
+    component = null;
   }
-
 }

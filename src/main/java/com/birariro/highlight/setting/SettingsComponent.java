@@ -1,139 +1,193 @@
 package com.birariro.highlight.setting;
 
+import com.birariro.highlight.KeywordColor;
 import com.birariro.highlight.support.Colors;
 
 import javax.swing.*;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsComponent {
-  private final Colors colors = new Colors();
-  private final AppSettings settings = AppSettings.getInstance();
-  private final JPanel panel;
-  private final JLabel bddColorLabel = new JLabel();
-  private final JLabel questionColorLabel = new JLabel();
-  private final JLabel exclamationColorLabel = new JLabel();
+    private JTable excludeTable;
+    private JButton addButton;
+    private JButton removeButton;
+    private JPanel mainPanel;
 
-  private final JButton bddColorButton;
-  private final JButton questionColorButton;
-  private final JButton exclamationColorButton;
+    private final Colors colors = new Colors();
+    private final AppSettings settings = AppSettings.getInstance();
+    private DefaultTableModel tableModel;
+    private String[][] contents;
 
-  public static final Icon DEFAULT_ICON = new Icon() {
-    @Override
-    public void paintIcon(Component c, Graphics g, int x, int y) {
-      g.setColor(c.getBackground());
-      g.fillRect(x, y, 20, 20);
+    public SettingsComponent() {
+        initializeContents();
+        initializeUIComponents();
+        changeContentsListener();
+        addRowButtonListener();
+        removeRowButtonListener();
     }
 
-    @Override
-    public int getIconWidth() {
-      return 20;
+    private void initializeContents() {
+        List<KeywordColor> keywordColorList = settings.getKeywordColors();
+        setContents(keywordColorList);
     }
 
-    @Override
-    public int getIconHeight() {
-      return 20;
-    }
-  };
-
-  public SettingsComponent() {
-    panel = new JPanel(new GridBagLayout());
-    GridBagConstraints gbc = createGbc();
-
-    bddColorButton = createColorButton(settings.getBddColor(), bddColorLabel);
-    bddColorButton.setIcon(DEFAULT_ICON);
-
-    questionColorButton = createColorButton(settings.getQuestionColor(), questionColorLabel);
-    questionColorButton.setIcon(DEFAULT_ICON);
-
-    exclamationColorButton = createColorButton(settings.getExclamationColor(), exclamationColorLabel);
-    exclamationColorButton.setIcon(DEFAULT_ICON);
-
-    bddColorLabel.setText(colorToRGBString(settings.getBddColor()));
-    questionColorLabel.setText(colorToRGBString(settings.getQuestionColor()));
-    exclamationColorLabel.setText(colorToRGBString(settings.getExclamationColor()));
-
-    addColorSetting(gbc, 0, "BDD ", bddColorLabel, bddColorButton);
-    addColorSetting(gbc, 1, "? ", questionColorLabel, questionColorButton);
-    addColorSetting(gbc, 2, "! ", exclamationColorLabel, exclamationColorButton);
-  }
-
-  private GridBagConstraints createGbc() {
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.fill = GridBagConstraints.HORIZONTAL;
-    gbc.insets = new Insets(5, 5, 5, 5);
-    gbc.anchor = GridBagConstraints.CENTER;
-    return gbc;
-  }
-
-  private JButton createColorButton(Color initialColor, JLabel label) {
-    JButton colorButton = new JButton();
-    colorButton.setPreferredSize(new Dimension(20, 20));
-    colorButton.setBackground(initialColor);
-    colorButton.setOpaque(true);
-    colorButton.setBorderPainted(false);
-    colorButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        Color chosenColor = showColorChooser(colorButton.getBackground());
-        if (chosenColor != null) {
-          label.setText(colorToRGBString(chosenColor));
-          colorButton.setBackground(chosenColor);
-          colorButton.setForeground(chosenColor);
+    public List<KeywordColor> getContents() {
+        List<KeywordColor> keywordColors = new ArrayList<>();
+        for (String[] content : contents) {
+            keywordColors.add(new KeywordColor(content[0], content[1]));
         }
-      }
-    });
-    return colorButton;
-  }
+        return keywordColors;
+    }
 
-  private void addColorSetting(GridBagConstraints gbc, int gridY, String labelText, JLabel colorLabel, JButton colorButton) {
-    gbc.gridx = 0;
-    gbc.gridy = gridY;
-    JLabel label = new JLabel(labelText);
-    label.setEnabled(false);
-    panel.add(label, gbc);
+    public void setContents(List<KeywordColor> keywordColors) {
+        contents = new String[keywordColors.size()][2];
+        for (int i = 0; i < keywordColors.size(); i++) {
+            contents[i][0] = keywordColors.get(i).getKeyword();
+            contents[i][1] = keywordColors.get(i).getColor();
+        }
+    }
 
-    gbc.gridx = 1;
-    panel.add(colorLabel, gbc);
+    private void initializeUIComponents() {
+        String[] columnNames = {"Keyword", "Color"};
+        tableModel = new DefaultTableModel(contents, columnNames);
+        excludeTable.setModel(tableModel);
 
-    gbc.gridx = 2;
-    panel.add(colorButton, gbc);
-  }
+        excludeTable.getTableHeader().getColumnModel().getColumn(1).setMaxWidth(100);
+        TableColumn colorColumn = excludeTable.getColumnModel().getColumn(1);
+        colorColumn.setCellRenderer(new ColorButtonRenderer());
+        colorColumn.setCellEditor(new ColorButtonEditor(excludeTable));
+    }
 
-  private Color showColorChooser(Color initialColor) {
-    return JColorChooser.showDialog(panel, "Choose Color", initialColor);
-  }
+    private void changeContentsListener() {
+        tableModel.addTableModelListener(e -> {
+            int row = e.getFirstRow();
+            int column = e.getColumn();
+            if (column == 0 || column == 1) {
+                String newValue = (String) tableModel.getValueAt(row, column);
+                System.out.println("Value changed at row " + row + ", column " + column + ": " + newValue);
+                contents[row][column] = newValue;
+            }
+        });
+    }
 
-  private String colorToRGBString(Color color) {
-    return colors.colorToString(color);
-  }
+    private void addRowButtonListener() {
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<KeywordColor> contents = getContents();
+                contents.add(new KeywordColor("keyword", "#FFFFFF"));
+                setContents(contents);
+                tableModel.addRow(new Object[]{"keyword", "#FFFFFF"});
+            }
+        });
+    }
 
-  public JPanel getPanel() {
-    return panel;
-  }
+    private void removeRowButtonListener() {
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = excludeTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    List<KeywordColor> contents = getContents();
+                    contents.remove(selectedRow);
+                    setContents(contents);
+                    tableModel.removeRow(selectedRow);
+                }
+            }
+        });
+    }
 
-  public String getQuestionColorString() {
-    return questionColorLabel.getText();
-  }
+    public JPanel getPanel() {
+        return mainPanel;
+    }
 
-  public String getExclamationColorString() {
-    return exclamationColorLabel.getText();
-  }
+    private class ColorButtonRenderer extends JButton implements TableCellRenderer {
+        public ColorButtonRenderer() {
+            setOpaque(true);
+            setBorderPainted(false);
+        }
 
-  public String getBddColorString() {
-    return bddColorLabel.getText();
-  }
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value != null) {
+                setIcon(DEFAULT_ICON);
+                setBackground(Color.decode((String) value));
+                setForeground(Color.decode((String) value));
+                setText("");
+            }
+            return this;
+        }
+    }
 
-  public void setQuestionColor(Color color) {
-    questionColorLabel.setText(colorToRGBString(color));
-  }
+    private class ColorButtonEditor extends AbstractCellEditor implements TableCellEditor {
+        private final JButton button;
+        private String currentColor;
+        private final JTable table;
+        public ColorButtonEditor(JTable table) {
+            this.table = table;
+            button = new JButton();
+            button.setIcon(DEFAULT_ICON);
+            button.setOpaque(true);
+            button.setBorderPainted(false);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Color initialColor = Color.decode(currentColor);
+                    Color newColor = JColorChooser.showDialog(button, "Choose Color", initialColor);
+                    if (newColor != null) {
+                        currentColor = colors.colorToString(newColor);
+                        button.setBackground(newColor);
+                        button.setForeground(newColor);
+                        updateTableRowColor();
+                    }
+                }
+            });
+        }
+        private void updateTableRowColor() {
+            int row = table.getEditingRow();
+            int column = table.getEditingColumn();
+            tableModel.setValueAt(currentColor, row, column);
+        }
 
-  public void setExclamationColor(Color color) {
-    exclamationColorLabel.setText(colorToRGBString(color));
-  }
+        @Override
+        public Object getCellEditorValue() {
+            return currentColor;
+        }
 
-  public void setBddColor(Color color) {
-    bddColorLabel.setText(colorToRGBString(color));
-  }
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            if (value != null) {
+                currentColor = (String) value;
+                button.setBackground(Color.decode(currentColor));
+                button.setForeground(Color.decode(currentColor));
+            }
+            return button;
+        }
+    }
+
+    public static final Icon DEFAULT_ICON = new Icon() {
+        @Override
+        public void paintIcon(Component c, Graphics g, int x, int y) {
+            g.setColor(c.getBackground());
+            g.fillRect(x, y, getIconWidth(), getIconHeight());
+        }
+
+        @Override
+        public int getIconWidth() {
+            return 100;
+        }
+
+        @Override
+        public int getIconHeight() {
+            return 13;
+        }
+    };
 }

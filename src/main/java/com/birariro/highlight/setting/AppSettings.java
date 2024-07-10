@@ -1,5 +1,6 @@
 package com.birariro.highlight.setting;
 
+import com.birariro.highlight.KeywordColor;
 import com.birariro.highlight.support.Colors;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -7,7 +8,8 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 @State(
     name = "com.birariro.highlight.setting.AppSettings",
@@ -18,38 +20,28 @@ public final class AppSettings
 
   private static Colors colors = new Colors();
 
-  static class State {
-    private String questionColor;
-    private String exclamationColor;
-    private String bddColor;
 
-    State() {
-      questionColor = "#232df1";
-      exclamationColor = "#f52564";
-      bddColor = "#33cc00";
+  static class State {
+
+    List keywordColors;
+
+    public State() {
+      keywordColors = new ArrayList<KeywordColor>();
+      keywordColors.add(new KeywordColor("note","#ffff66"));
+      keywordColors.add(new KeywordColor("info","#232df1"));
+      keywordColors.add(new KeywordColor("given","#33c936"));
+      keywordColors.add(new KeywordColor("when","#33dd00"));
+      keywordColors.add(new KeywordColor("then","#33f57d"));
     }
   }
 
   private State myState = new State();
 
-  public Color getQuestionColor() {
-    return colors.stringToColor(getState().questionColor);
+  public List<KeywordColor> getKeywordColors(){
+    return this.getState().keywordColors;
   }
-  public Color getExclamationColor() {
-    return colors.stringToColor(getState().exclamationColor);
-  }
-  public Color getBddColor() {
-    return colors.stringToColor(getState().bddColor);
-  }
-
-  public void setQuestionColor(String color) {
-    getState().questionColor = color;
-  }
-  public void setExclamationColor(String color) {
-    getState().exclamationColor = color;
-  }
-  public void setBddColor(String color) {
-    getState().bddColor = color;
+  public void setKeywordColors(List<KeywordColor> keywordColor){
+    this.getState().keywordColors = keywordColor;
   }
 
   public static AppSettings getInstance() {

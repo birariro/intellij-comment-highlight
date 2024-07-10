@@ -10,9 +10,9 @@
   <li>java</li>
 </ul>
 
-<p>Highlight keywords:</p>
+<p>Sample Highlight keywords:</p>
 <ul>
-  <li>Common keywords: '!', '?'</li>
+  <li>Common keywords: 'note', 'info'</li>
   <li>BDD keywords: 'given', 'when', 'then'</li>
 </ul>
 
@@ -23,7 +23,7 @@ It's very simple
     <img src="https://github.com/birariro/intellij-comment-highlight/blob/main/img/main.png?raw=true"/>
 </p>
 
-If you don't like the color, change it
+Add any keywords and colors you want
 <p align="center">
     <img src="https://github.com/birariro/intellij-comment-highlight/blob/main/img/setting.png?raw=true"/>
 </p>
